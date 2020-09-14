@@ -11,8 +11,10 @@
                 >
                 <label for="email">Email</label>
 
-                <small class="helper-text invalid" v-if="$v.email.$dirty && !$v.email.required">Введите Ваш email</small>
-                <small class="helper-text invalid" v-else-if="$v.email.$dirty && !$v.email.email">Введите корректный email</small>
+                <small class="helper-text invalid" v-if="$v.email.$dirty && !$v.email.required">Введите Ваш
+                    email</small>
+                <small class="helper-text invalid" v-else-if="$v.email.$dirty && !$v.email.email">Введите корректный
+                    email</small>
             </div>
             <div class="input-field">
                 <input
@@ -22,8 +24,10 @@
                         :class="{invalid: ($v.password.$dirty && !$v.password.required)|| ($v.password.$dirty && !$v.password.minLength)}"
                 >
                 <label for="password">Пароль</label>
-                <small class="helper-text invalid" v-if="$v.password.$dirty && !$v.password.required">Введите Ваш пароль</small>
-                <small class="helper-text invalid" v-else-if="$v.password.$dirty && !$v.password.minLength">Пароль не должен быть меньше {{$v.password.$params.minLength.min}} символов. {{password.length}}</small>
+                <small class="helper-text invalid" v-if="$v.password.$dirty && !$v.password.required">Введите Ваш
+                    пароль</small>
+                <small class="helper-text invalid" v-else-if="$v.password.$dirty && !$v.password.minLength">Пароль не
+                    должен быть меньше {{$v.password.$params.minLength.min}} символов. {{password.length}}</small>
             </div>
             <div class="input-field">
                 <input
@@ -38,7 +42,7 @@
             <p>
                 <label>
                     <input type="checkbox"
-                    v-model="agree"
+                           v-model="agree"
                     />
                     <span>С правилами согласен</span>
                 </label>
@@ -66,6 +70,7 @@
 
 <script>
     import {email, required, minLength} from 'vuelidate/lib/validators'
+
     export default {
         name: 'register',
         data: () => ({
@@ -81,8 +86,8 @@
             agree: {checked: v => v}
         },
         methods: {
-            onSubmit() {
-                if (this.$v.$invalid){
+            async onSubmit() {
+                if (this.$v.$invalid) {
                     this.$v.$touch()
                     return
                 }
@@ -92,8 +97,12 @@
                     name: this.name
                 }
 
-                console.log(formData)
-                this.$router.push('/')
+                try {
+                    await this.$store.dispatch('register', formData)
+                    this.$router.push('/')
+                } catch (e) {
+
+                }
             }
         }
     }
